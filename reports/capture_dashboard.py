@@ -105,7 +105,14 @@ if __name__ == "__main__":
                 query = with_lang(query, lang)
                 page = browser.new_page(viewport={"width": W, "height": height}, device_scale_factor=SCALE,
                                         color_scheme="light")
-                page.goto(base + query, wait_until="domcontentloaded", timeout=180_000)
+                for attempt in range(4):                     # the hosted app occasionally resets a connection
+                    try:
+                        page.goto(base + query, wait_until="domcontentloaded", timeout=180_000)
+                        break
+                    except Exception:
+                        if attempt == 3:
+                            raise
+                        page.wait_for_timeout(5000)
                 fr = app_frame(page)
                 settle(fr, lang)
                 if heading:
