@@ -1,3 +1,5 @@
+[العربية](README.ar.md)
+
 # job-market-pipeline
 
 Fifteen years of tech hiring, collected from four job boards, cleaned into one table and
@@ -6,7 +8,8 @@ turned into findings. **Start with the showcase: [reports/SHOWCASE.md](reports/S
 
 **Live dashboard: <https://tech-hiring-2011-2026.streamlit.app>** — filter by source,
 role, skill and year. (Hosted on Streamlit Community Cloud; it may take a few seconds to
-wake up if nobody has visited recently.)
+wake up if nobody has visited recently.) The interface is available in English and Arabic:
+use the language switch in the sidebar, or open <https://tech-hiring-2011-2026.streamlit.app/?lang=ar>.
 
 ## Findings in brief
 

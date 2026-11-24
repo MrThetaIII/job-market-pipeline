@@ -6,6 +6,8 @@ so no browser download):   pip install playwright
     python -m reports.capture_dashboard                              # the deployed app
     python -m reports.capture_dashboard http://localhost:8501/       # a local run
 
+English views go to reports/figures/, the Arabic interface (?lang=ar) to reports/figures_ar/.
+
 Each view is just a URL, because the dashboard reads its filters from the query string.
 The address bar drawn on top of every image shows exactly the URL that produced it.
 """
@@ -18,7 +20,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 from playwright.sync_api import Frame, Page, sync_playwright
 
-FIG = Path(__file__).resolve().parent / "figures"
+FIGS = {"en": Path(__file__).resolve().parent / "figures", "ar": Path(__file__).resolve().parent / "figures_ar"}
 LIVE = "https://tech-hiring-2011-2026.streamlit.app/"
 W, SCALE = 1440, 1.5
 
@@ -31,6 +33,19 @@ SHOTS = {
     "dash_5_table.png": ("?skill=Rust&remote=1&from=2018", "Matching posts", 560),
     "dash_6_all_sources.png": ("?source=hn,wwr,arbeitnow,remoteok&from=2026", "Role mix", 600),
 }
+# headings as the Arabic interface shows them
+HEADING_AR = {"Most mentioned skills": "المهارات الأكثر ذكرًا", "Role mix": "توزيع الوظائف",
+              "Matching posts": "الإعلانات المطابقة"}
+
+
+def with_lang(query: str, lang: str) -> str:
+    if lang == "en":
+        return query
+    return (query + "&" if query else "?") + f"lang={lang}"
+
+
+def label(heading: str, lang: str) -> str:
+    return HEADING_AR[heading] if lang == "ar" else heading
 
 
 def app_frame(page: Page) -> Frame:
@@ -49,8 +64,8 @@ def app_frame(page: Page) -> Frame:
     raise RuntimeError("dashboard did not load")
 
 
-def settle(fr: Frame) -> None:
-    fr.wait_for_selector("text=Matching posts", timeout=120_000)
+def settle(fr: Frame, lang: str) -> None:
+    fr.wait_for_selector(f"text={label('Matching posts', lang)}", timeout=120_000)
     fr.wait_for_function("document.querySelectorAll('canvas, svg.marks').length >= 5", timeout=120_000)
     fr.wait_for_function("!document.querySelector('[data-testid=\"stStatusWidget\"]')", timeout=120_000)
     fr.page.wait_for_timeout(2000)
@@ -84,17 +99,20 @@ if __name__ == "__main__":
     base = sys.argv[1] if len(sys.argv) > 1 else LIVE
     with sync_playwright() as p:
         browser = p.chromium.launch(channel="msedge")
-        for name, (query, heading, height) in SHOTS.items():
-            page = browser.new_page(viewport={"width": W, "height": height}, device_scale_factor=SCALE,
-                                    color_scheme="light")
-            page.goto(base + query, wait_until="domcontentloaded", timeout=180_000)
-            fr = app_frame(page)
-            settle(fr)
-            if heading:
-                fr.evaluate("""(h) => { const el = [...document.querySelectorAll('h2,h3')].find(e => e.innerText.trim() === h);
-                                        el.scrollIntoView({block: 'start'}); }""", heading)
-                page.wait_for_timeout(1500)
-            with_address_bar(page.screenshot(), base + query).save(FIG / name)
-            page.close()
-            print("wrote", name, base + query)
+        for lang, fig in FIGS.items():
+            fig.mkdir(exist_ok=True)
+            for name, (query, heading, height) in SHOTS.items():
+                query = with_lang(query, lang)
+                page = browser.new_page(viewport={"width": W, "height": height}, device_scale_factor=SCALE,
+                                        color_scheme="light")
+                page.goto(base + query, wait_until="domcontentloaded", timeout=180_000)
+                fr = app_frame(page)
+                settle(fr, lang)
+                if heading:
+                    fr.evaluate("""(h) => { const el = [...document.querySelectorAll('h2,h3')].find(e => e.innerText.trim() === h);
+                                            el.scrollIntoView({block: 'start'}); }""", label(heading, lang))
+                    page.wait_for_timeout(1500)
+                with_address_bar(page.screenshot(), base + query).save(fig / name)
+                page.close()
+                print("wrote", fig.name, name, base + query)
         browser.close()

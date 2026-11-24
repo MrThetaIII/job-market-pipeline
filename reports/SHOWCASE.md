@@ -1,3 +1,5 @@
+[العربية](SHOWCASE.ar.md)
+
 # Fifteen years of tech hiring, read from four job boards
 
 *A data pipeline project: collect → clean → enrich → analyse. Data collected 24 November 2026.*
