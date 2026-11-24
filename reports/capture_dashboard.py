@@ -1,23 +1,26 @@
-"""Capture dashboard screenshots for the showcase.
+"""Capture dashboard screenshots for the showcase, each with its endpoint in an address bar.
 
 Needs Playwright (dev-only dependency; it drives the Edge already installed on Windows,
 so no browser download):   pip install playwright
 
-Start the dashboard first (streamlit run dashboard/app.py), then:
-
-    python -m reports.capture_dashboard
+    python -m reports.capture_dashboard                              # the deployed app
+    python -m reports.capture_dashboard http://localhost:8501/       # a local run
 
 Each view is just a URL, because the dashboard reads its filters from the query string.
+The address bar drawn on top of every image shows exactly the URL that produced it.
 """
 from __future__ import annotations
 
+import io
+import sys
 from pathlib import Path
 
-from playwright.sync_api import sync_playwright
+from PIL import Image, ImageDraw, ImageFont
+from playwright.sync_api import Frame, Page, sync_playwright
 
 FIG = Path(__file__).resolve().parent / "figures"
-BASE = "http://localhost:8501/"
-W = 1440
+LIVE = "https://tech-hiring-2011-2026.streamlit.app/"
+W, SCALE = 1440, 1.5
 
 # file name -> (query string, heading to scroll to or None for the top, viewport height)
 SHOTS = {
@@ -30,27 +33,68 @@ SHOTS = {
 }
 
 
-def settle(page) -> None:
-    page.wait_for_selector("h1", timeout=60_000)
-    page.wait_for_selector("text=Matching posts", timeout=60_000)
-    page.wait_for_function("document.querySelectorAll('canvas, svg.marks').length >= 5", timeout=60_000)
-    page.wait_for_function("!document.querySelector('[data-testid=\"stStatusWidget\"]')", timeout=60_000)
-    page.wait_for_timeout(1500)
+def app_frame(page: Page) -> Frame:
+    """Streamlit Community Cloud wraps the app in an iframe; locally it is the page itself."""
+    page.wait_for_function(
+        "() => [window, ...Array.from(window.frames)].some(w => { try { return w.document.querySelector('h1') } catch (e) { return false } })",
+        timeout=180_000)
+    for _ in range(120):
+        for fr in page.frames:
+            try:
+                if fr.query_selector("h1") and fr.query_selector("[data-testid='stSidebar']"):
+                    return fr
+            except Exception:
+                pass
+        page.wait_for_timeout(500)
+    raise RuntimeError("dashboard did not load")
 
 
-with sync_playwright() as p:
-    browser = p.chromium.launch(channel="msedge")
-    for name, (query, heading, height) in SHOTS.items():
-        page = browser.new_page(viewport={"width": W, "height": height}, device_scale_factor=1.5,
-                                color_scheme="light")
-        page.goto(BASE + query)
-        settle(page)
-        if heading:
-            page.get_by_role("heading", name=heading).scroll_into_view_if_needed()
-            page.evaluate("""(h) => { const el = [...document.querySelectorAll('h2,h3')].find(e => e.innerText.trim() === h);
-                                      el.scrollIntoView({block: 'start'}); }""", heading)
-            page.wait_for_timeout(1200)
-        page.screenshot(path=str(FIG / name))
-        page.close()
-        print("wrote", name)
-    browser.close()
+def settle(fr: Frame) -> None:
+    fr.wait_for_selector("text=Matching posts", timeout=120_000)
+    fr.wait_for_function("document.querySelectorAll('canvas, svg.marks').length >= 5", timeout=120_000)
+    fr.wait_for_function("!document.querySelector('[data-testid=\"stStatusWidget\"]')", timeout=120_000)
+    fr.page.wait_for_timeout(2000)
+
+
+def with_address_bar(png: bytes, url: str) -> Image.Image:
+    shot = Image.open(io.BytesIO(png)).convert("RGB")
+    bar_h = int(46 * SCALE)
+    out = Image.new("RGB", (shot.width, shot.height + bar_h), "#e9e8e4")
+    out.paste(shot, (0, bar_h))
+    d = ImageDraw.Draw(out)
+    pad, r = int(10 * SCALE), int(13 * SCALE)
+    for i, col in enumerate(("#c3c2b7", "#c3c2b7", "#c3c2b7")):          # window dots
+        cx = int((22 + i * 20) * SCALE)
+        d.ellipse((cx - 6 * SCALE, bar_h / 2 - 6 * SCALE, cx + 6 * SCALE, bar_h / 2 + 6 * SCALE), fill=col)
+    x0 = int(90 * SCALE)
+    d.rounded_rectangle((x0, pad * 0.7, shot.width - pad * 2, bar_h - pad * 0.7), radius=r, fill="#fcfcfb")
+    try:
+        font = ImageFont.truetype("segoeui.ttf", int(15 * SCALE))
+    except OSError:
+        font = ImageFont.load_default()
+    host, _, rest = url.partition("://")[2].partition("/")
+    tx = x0 + int(16 * SCALE)
+    d.text((tx, bar_h / 2), host, font=font, fill="#0b0b0b", anchor="lm")
+    d.text((tx + d.textlength(host, font=font), bar_h / 2), "/" + rest, font=font, fill="#52514e", anchor="lm")
+    d.line((0, bar_h - 1, shot.width, bar_h - 1), fill="#c3c2b7")
+    return out
+
+
+if __name__ == "__main__":
+    base = sys.argv[1] if len(sys.argv) > 1 else LIVE
+    with sync_playwright() as p:
+        browser = p.chromium.launch(channel="msedge")
+        for name, (query, heading, height) in SHOTS.items():
+            page = browser.new_page(viewport={"width": W, "height": height}, device_scale_factor=SCALE,
+                                    color_scheme="light")
+            page.goto(base + query, wait_until="domcontentloaded", timeout=180_000)
+            fr = app_frame(page)
+            settle(fr)
+            if heading:
+                fr.evaluate("""(h) => { const el = [...document.querySelectorAll('h2,h3')].find(e => e.innerText.trim() === h);
+                                        el.scrollIntoView({block: 'start'}); }""", heading)
+                page.wait_for_timeout(1500)
+            with_address_bar(page.screenshot(), base + query).save(FIG / name)
+            page.close()
+            print("wrote", name, base + query)
+        browser.close()

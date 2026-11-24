@@ -176,7 +176,8 @@ Arbeitnow and RemoteOK. The full log, including missing-value rates per column, 
 
 The ten figures answer the questions I chose. The dashboard lets a reader ask their own.
 It is a single Streamlit page over the same Parquet tables, and every panel recalculates
-when a filter changes.
+when a filter changes. Every view below is an endpoint of the deployed app: the
+filters live in the address, so each screenshot can be opened as shown.
 
 **Live: <https://tech-hiring-2011-2026.streamlit.app>** (hosted on Streamlit Community
 Cloud; it can take a few seconds to wake if nobody has visited recently). To run it
@@ -189,6 +190,8 @@ streamlit run dashboard/app.py
 ### A. Overview: filters and headline numbers
 
 ![Dashboard overview](figures/dash_1_overview.png)
+
+Endpoint: [`https://tech-hiring-2011-2026.streamlit.app/`](https://tech-hiring-2011-2026.streamlit.app/)
 
 * **Filters (left).** Year range, source, role family, skill, and a "remote only" switch.
   An empty filter means "everything". The skill filter keeps posts that mention *any* of
@@ -205,6 +208,8 @@ streamlit run dashboard/app.py
 
 ![Skills panels](figures/dash_2_skills.png)
 
+Endpoint: [`https://tech-hiring-2011-2026.streamlit.app/`](https://tech-hiring-2011-2026.streamlit.app/) (same endpoint, scrolled to the skills row)
+
 * **Most mentioned skills** ranks the top 15 for whatever is currently filtered, as a
   share of posts.
 * **Skill trend by year** compares up to four skills of your choice. The default view
@@ -215,6 +220,8 @@ streamlit run dashboard/app.py
 
 ![Roles and salary panels](figures/dash_3_roles_salary.png)
 
+Endpoint: [`https://tech-hiring-2011-2026.streamlit.app/`](https://tech-hiring-2011-2026.streamlit.app/) (same endpoint, scrolled to the roles row)
+
 * **Role mix** shows which role families the filtered posts belong to.
 * **Advertised salary by role** draws the median (dot) and the middle 50% of posts
   (bar) for each role with at least 20 salaried posts. Showing the spread matters here:
@@ -223,6 +230,8 @@ streamlit run dashboard/app.py
 ### D. Filters in action
 
 ![Filtered view: remote Rust jobs since 2018](figures/dash_4_filtered.png)
+
+Endpoint: [`https://tech-hiring-2011-2026.streamlit.app/?skill=Rust&remote=1&from=2018`](https://tech-hiring-2011-2026.streamlit.app/?skill=Rust&remote=1&from=2018)
 
 The same page narrowed to *remote posts mentioning Rust since 2018*: 1,757 posts from
 562 companies, 12% stating a salary, median $172k against $130k for the unfiltered
@@ -243,6 +252,8 @@ Accepted parameters: `from`, `to` (years), `source` (`hn`, `wwr`, `arbeitnow`,
 
 ![Matching posts table](figures/dash_5_table.png)
 
+Endpoint: [`https://tech-hiring-2011-2026.streamlit.app/?skill=Rust&remote=1&from=2018`](https://tech-hiring-2011-2026.streamlit.app/?skill=Rust&remote=1&from=2018) (scrolled to the table)
+
 The newest 500 matching posts, sortable and searchable, with company, title, role,
 location, remote flag and salary. Each row links to the original listing, which keeps
 the aggregates checkable and honours the boards' request for a link back.
@@ -251,14 +262,17 @@ the aggregates checkable and honours the boards' request for a link back.
 
 ![All four sources, 2026](figures/dash_6_all_sources.png)
 
+Endpoint: [`https://tech-hiring-2011-2026.streamlit.app/?source=hn,wwr,arbeitnow,remoteok&from=2026`](https://tech-hiring-2011-2026.streamlit.app/?source=hn,wwr,arbeitnow,remoteok&from=2026)
+
 Selecting all four sources for 2026 gives the live version of figure 10: once the
 general-purpose boards are added, sales, marketing, support and non-tech roles take up
 a large part of the mix, and the salary panel gains roles such as customer support that
 barely exist on Hacker News.
 
-The screenshots are generated, not taken by hand: `python -m reports.capture_dashboard`
-opens each view by its link in headless Edge and saves the images, so they can be
-refreshed after every pipeline run.
+The screenshots are taken from the deployed app, not a local run, and each carries the
+endpoint that produced it in its address bar. They are generated, not taken by hand:
+`python -m reports.capture_dashboard` opens each endpoint in headless Edge and saves the
+images, so they can be refreshed after every pipeline run.
 
 ## Reproduce
 
