@@ -1,0 +1,15 @@
+# raw responses and local-only artefacts
+data/raw/
+logs/
+__pycache__/
+*.pyc
+.venv/
+.env
+.claude/
+*.duckdb
+*.duckdb.wal
+
+# full tables stay local (large, and they contain the boards' advert text);
+# the deployed dashboard uses dashboard_jobs.parquet + job_skills.parquet instead
+data/processed/jobs.parquet
+data/processed/rejects.parquet

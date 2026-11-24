@@ -1,0 +1,232 @@
+# Skill dictionary: name, category (cat), aliases.
+#   aliases  - matched case-insensitively on token boundaries (so "java" never fires inside "javascript")
+#   cs: true - aliases are case-sensitive (AWS, SAS, React, Excel ... words that are also ordinary English)
+#   pattern  - hand-written regex for the truly ambiguous short names (Go, R, C); case-sensitive
+# Boundary rule used by enrich.py: not preceded by [A-Za-z0-9_], not followed by [A-Za-z0-9_+#].
+
+# ---------------- languages ----------------
+- {name: Python, cat: language, aliases: [python, python3]}
+- {name: JavaScript, cat: language, aliases: [javascript, ecmascript, es6]}
+- {name: TypeScript, cat: language, aliases: [typescript]}
+- {name: Java, cat: language, aliases: [java]}
+- {name: "C#", cat: language, aliases: ["c#", csharp, "c sharp"]}
+- {name: "C++", cat: language, aliases: ["c++", cpp]}
+- name: C
+  cat: language
+  # bare "C" only inside a tech list ("C, C++", "C/C++", "in C and"), never "Series C" or "C-level"
+  pattern: '(?<![A-Za-z0-9_\-])(?<!Series )(?<!series )C(?=\s?[,/]\s?(?:C\+\+|Rust|Go|Python|Java|Assembly|Linux|Obj))|(?<=[,/] )C(?= (?:and|or) )|(?<=in )C(?= (?:and|or|programming|for)\b)|(?<![A-Za-z0-9_])C(?= programming)|(?<=C\+\+/)C(?![A-Za-z0-9_+#\-])|(?<=C\+\+, )C(?![A-Za-z0-9_+#\-])'
+- name: Go
+  cat: language
+  # "Golang" always; bare capitalised "Go" only when it sits in a list or next to a tech word
+  pattern: '(?i:\bgolang\b)|(?<![A-Za-z0-9_])Go(?=\s?[,/)(|;]|\s(?:and|or|developers?|engineers?|backend|back-end|services|microservices|programming|experience|codebase|\+)\b)|(?<=[,/(|] )Go(?![A-Za-z0-9_])|(?<=[,/(|])Go(?![A-Za-z0-9_])|(?:(?<= in )|(?<=and )|(?<= or ))Go(?=[.,;)]|\s?$)'
+- name: R
+  cat: language
+  # bare "R" only inside a list or "R programming"; never "R&D"
+  pattern: '(?<![A-Za-z0-9_&])R(?=\s?[,/]\s?(?:Python|SQL|SAS|Stata|Julia|Matlab|MATLAB|Shiny|Tableau|Scala|Java|Spark|or|and))|(?<=Python, )R(?![A-Za-z0-9_&+#])|(?<=Python/)R(?![A-Za-z0-9_&+#])|(?<=SQL, )R(?![A-Za-z0-9_&+#])|(?<=Python or )R(?![A-Za-z0-9_&+#])|(?<=Python and )R(?![A-Za-z0-9_&+#])|(?<![A-Za-z0-9_&])R(?= (?:programming|language|Shiny|packages?|and Python|or Python)\b)|\bRStudio\b|\btidyverse\b|\bggplot2?\b'
+- {name: Rust, cat: language, cs: true, aliases: [Rust, rustlang]}
+- {name: Ruby, cat: language, aliases: [ruby]}
+- {name: PHP, cat: language, aliases: [php]}
+- {name: Scala, cat: language, aliases: [scala]}
+- {name: Kotlin, cat: language, aliases: [kotlin]}
+- {name: Swift, cat: language, cs: true, aliases: [Swift, SwiftUI]}
+- {name: Objective-C, cat: language, aliases: [objective-c, "objective c", objc, obj-c]}
+- {name: Elixir, cat: language, aliases: [elixir]}
+- {name: Erlang, cat: language, aliases: [erlang]}
+- {name: Haskell, cat: language, aliases: [haskell]}
+- {name: Clojure, cat: language, aliases: [clojure, clojurescript]}
+- {name: OCaml, cat: language, aliases: [ocaml]}
+- {name: "F#", cat: language, aliases: ["f#", fsharp]}
+- {name: Perl, cat: language, aliases: [perl]}
+- {name: Lua, cat: language, cs: true, aliases: [Lua]}
+- {name: Dart, cat: language, cs: true, aliases: [Dart]}
+- {name: Julia, cat: language, cs: true, aliases: [JuliaLang, "Julia language", "Julia,"]}
+- {name: MATLAB, cat: language, aliases: [matlab]}
+- {name: Zig, cat: language, cs: true, aliases: [Zig, ziglang]}
+- {name: Solidity, cat: language, aliases: [solidity]}
+- {name: CoffeeScript, cat: language, aliases: [coffeescript]}
+- {name: Bash, cat: language, aliases: [bash, "shell scripting", "shell script"]}
+- {name: PowerShell, cat: language, aliases: [powershell]}
+- {name: SQL, cat: language, aliases: [sql, t-sql, tsql, "pl/sql", plsql]}
+- {name: HTML, cat: language, aliases: [html, html5]}
+- {name: CSS, cat: language, aliases: [css, css3]}
+- {name: Verilog, cat: language, aliases: [verilog, systemverilog, vhdl]}
+- {name: COBOL, cat: language, aliases: [cobol]}
+- {name: WebAssembly, cat: language, aliases: [webassembly, wasm]}
+
+# ---------------- frontend ----------------
+- {name: React, cat: frontend, cs: true, aliases: [React, ReactJS, React.js, "react.js", reactjs]}
+- {name: React Native, cat: mobile, aliases: ["react native", react-native]}
+- {name: Angular, cat: frontend, aliases: [angular, angularjs, "angular.js"]}
+- {name: Vue, cat: frontend, cs: true, aliases: [Vue, VueJS, Vue.js, vuejs, "vue.js"]}
+- {name: Svelte, cat: frontend, aliases: [svelte, sveltekit]}
+- {name: Next.js, cat: frontend, aliases: [next.js, nextjs]}
+- {name: Nuxt, cat: frontend, aliases: [nuxt, nuxt.js]}
+- {name: Ember, cat: frontend, aliases: [ember.js, emberjs]}
+- {name: Backbone, cat: frontend, aliases: [backbone.js, backbonejs]}
+- {name: jQuery, cat: frontend, aliases: [jquery]}
+- {name: Redux, cat: frontend, aliases: [redux]}
+- {name: Tailwind, cat: frontend, aliases: [tailwind, tailwindcss]}
+- {name: Sass, cat: frontend, aliases: [sass, scss]}
+- {name: Webpack, cat: frontend, aliases: [webpack]}
+- {name: WebGL, cat: frontend, aliases: [webgl, three.js, threejs]}
+- {name: D3, cat: frontend, aliases: [d3.js, d3js]}
+
+# ---------------- backend frameworks ----------------
+- {name: Node.js, cat: backend, aliases: [node.js, nodejs, "node js"]}
+- {name: Django, cat: backend, aliases: [django]}
+- {name: Flask, cat: backend, cs: true, aliases: [Flask]}
+- {name: FastAPI, cat: backend, aliases: [fastapi]}
+- {name: Rails, cat: backend, aliases: [rails, "ruby on rails", ror]}
+- {name: Spring, cat: backend, cs: true, aliases: [Spring, "Spring Boot", SpringBoot]}
+- {name: Laravel, cat: backend, aliases: [laravel]}
+- {name: Symfony, cat: backend, aliases: [symfony]}
+- {name: Express, cat: backend, aliases: [express.js, expressjs]}
+- {name: .NET, cat: backend, aliases: [.net, dotnet, asp.net, ".net core"]}
+- {name: GraphQL, cat: backend, aliases: [graphql]}
+- {name: REST, cat: backend, cs: true, aliases: [REST, RESTful, "REST API", "REST APIs"]}
+- {name: gRPC, cat: backend, aliases: [grpc]}
+- {name: Microservices, cat: backend, aliases: [microservices, micro-services, microservice]}
+- {name: Meteor, cat: backend, cs: true, aliases: [Meteor, MeteorJS, Meteor.js]}
+- {name: Phoenix, cat: backend, cs: true, aliases: ["Phoenix framework", "Elixir/Phoenix", "Phoenix LiveView", LiveView]}
+
+# ---------------- mobile ----------------
+- {name: iOS, cat: mobile, aliases: [ios]}
+- {name: Android, cat: mobile, aliases: [android]}
+- {name: Flutter, cat: mobile, aliases: [flutter]}
+- {name: Xamarin, cat: mobile, aliases: [xamarin]}
+
+# ---------------- databases ----------------
+- {name: PostgreSQL, cat: database, aliases: [postgresql, postgres, psql, pgsql]}
+- {name: MySQL, cat: database, aliases: [mysql, mariadb]}
+- {name: SQLite, cat: database, aliases: [sqlite]}
+- {name: SQL Server, cat: database, aliases: ["sql server", mssql, "ms sql"]}
+- {name: Oracle, cat: database, cs: true, aliases: ["Oracle DB", "Oracle Database", "Oracle SQL", "Oracle,"]}
+- {name: MongoDB, cat: database, aliases: [mongodb, mongo]}
+- {name: Redis, cat: database, aliases: [redis]}
+- {name: Elasticsearch, cat: database, aliases: [elasticsearch, "elastic search", opensearch]}
+- {name: Cassandra, cat: database, aliases: [cassandra, scylladb]}
+- {name: DynamoDB, cat: database, aliases: [dynamodb]}
+- {name: Neo4j, cat: database, aliases: [neo4j]}
+- {name: ClickHouse, cat: database, aliases: [clickhouse]}
+- {name: DuckDB, cat: database, aliases: [duckdb]}
+- {name: NoSQL, cat: database, aliases: [nosql]}
+- {name: Firebase, cat: database, aliases: [firebase, firestore]}
+- {name: Supabase, cat: database, aliases: [supabase]}
+- {name: Memcached, cat: database, aliases: [memcached, memcache]}
+
+# ---------------- data engineering ----------------
+- {name: Spark, cat: data_eng, cs: true, aliases: [Spark, PySpark, "Apache Spark"]}
+- {name: Hadoop, cat: data_eng, aliases: [hadoop, mapreduce, hdfs]}
+- {name: Hive, cat: data_eng, cs: true, aliases: [Hive]}
+- {name: Kafka, cat: data_eng, aliases: [kafka]}
+- {name: Airflow, cat: data_eng, aliases: [airflow]}
+- {name: dbt, cat: data_eng, aliases: [dbt]}
+- {name: Snowflake, cat: data_eng, cs: true, aliases: [Snowflake]}
+- {name: BigQuery, cat: data_eng, aliases: [bigquery, "big query"]}
+- {name: Redshift, cat: data_eng, aliases: [redshift]}
+- {name: Databricks, cat: data_eng, aliases: [databricks]}
+- {name: Flink, cat: data_eng, aliases: [flink]}
+- {name: Presto/Trino, cat: data_eng, cs: true, aliases: [Presto, PrestoDB, Trino]}
+- {name: Dagster, cat: data_eng, aliases: [dagster]}
+- {name: Prefect, cat: data_eng, cs: true, aliases: [Prefect]}
+- {name: Fivetran, cat: data_eng, aliases: [fivetran, airbyte]}
+- {name: ETL, cat: data_eng, cs: true, aliases: [ETL, ELT]}
+- {name: RabbitMQ, cat: data_eng, aliases: [rabbitmq]}
+- {name: Data Warehouse, cat: data_eng, aliases: ["data warehouse", "data warehousing", "data lake", lakehouse]}
+
+# ---------------- analytics / BI ----------------
+- {name: Tableau, cat: analytics, aliases: [tableau]}
+- {name: Power BI, cat: analytics, aliases: ["power bi", powerbi]}
+- {name: Looker, cat: analytics, cs: true, aliases: [Looker, LookML]}
+- {name: Excel, cat: analytics, cs: true, aliases: [Excel, "MS Excel"]}
+- {name: Metabase, cat: analytics, aliases: [metabase]}
+- {name: SAS, cat: analytics, cs: true, aliases: [SAS]}
+- {name: Stata, cat: analytics, cs: true, aliases: [Stata, SPSS]}
+- {name: A/B Testing, cat: analytics, aliases: ["a/b testing", "a/b tests", "ab testing", experimentation]}
+- {name: Statistics, cat: analytics, aliases: [statistics, "statistical modeling", "statistical modelling", "statistical analysis"]}
+
+# ---------------- ML / AI ----------------
+- {name: Machine Learning, cat: ml_ai, aliases: ["machine learning", "machine-learning"]}
+- {name: ML, cat: ml_ai, cs: true, aliases: [ML]}
+- {name: AI, cat: ml_ai, cs: true, aliases: [AI, "A.I.", "artificial intelligence", "Artificial Intelligence"]}
+- {name: Deep Learning, cat: ml_ai, aliases: ["deep learning", "neural networks", "neural network"]}
+- {name: LLM, cat: ml_ai, aliases: [llm, llms, "large language model", "large language models"]}
+- {name: Generative AI, cat: ml_ai, aliases: ["generative ai", genai, "gen ai"]}
+- {name: AI Agents, cat: ml_ai, aliases: ["ai agents", "ai agent", agentic]}
+- {name: RAG, cat: ml_ai, cs: true, aliases: [RAG, "retrieval-augmented", "retrieval augmented"]}
+- {name: NLP, cat: ml_ai, aliases: [nlp, "natural language processing"]}
+- {name: Computer Vision, cat: ml_ai, aliases: ["computer vision", opencv]}
+- {name: Reinforcement Learning, cat: ml_ai, aliases: ["reinforcement learning"]}
+- {name: TensorFlow, cat: ml_ai, aliases: [tensorflow]}
+- {name: PyTorch, cat: ml_ai, aliases: [pytorch]}
+- {name: Keras, cat: ml_ai, aliases: [keras]}
+- {name: scikit-learn, cat: ml_ai, aliases: [scikit-learn, sklearn, "scikit learn"]}
+- {name: pandas, cat: ml_ai, aliases: [pandas]}
+- {name: NumPy, cat: ml_ai, aliases: [numpy, scipy]}
+- {name: Hugging Face, cat: ml_ai, aliases: ["hugging face", huggingface]}
+- {name: LangChain, cat: ml_ai, aliases: [langchain, llamaindex, langgraph]}
+- {name: OpenAI, cat: ml_ai, aliases: [openai, chatgpt, "gpt-3", "gpt-4", gpt4, gpt3]}
+- {name: Claude, cat: ml_ai, cs: true, aliases: [Claude, Anthropic]}
+- {name: MLOps, cat: ml_ai, aliases: [mlops, "ml ops", mlflow, kubeflow, sagemaker]}
+- {name: CUDA, cat: ml_ai, cs: true, aliases: [CUDA, GPU, GPUs]}
+- {name: Big Data, cat: ml_ai, aliases: ["big data"]}
+- {name: Data Science, cat: ml_ai, aliases: ["data science"]}
+
+# ---------------- cloud ----------------
+- {name: AWS, cat: cloud, cs: true, aliases: [AWS, "Amazon Web Services", EC2, S3, "AWS Lambda"]}
+- {name: GCP, cat: cloud, aliases: [gcp, "google cloud", gce]}
+- {name: Azure, cat: cloud, aliases: [azure]}
+- {name: Heroku, cat: cloud, aliases: [heroku]}
+- {name: Vercel, cat: cloud, aliases: [vercel, netlify]}
+- {name: Cloudflare, cat: cloud, aliases: [cloudflare]}
+- {name: Serverless, cat: cloud, aliases: [serverless]}
+
+# ---------------- devops / infra ----------------
+- {name: Docker, cat: devops, aliases: [docker, containers, containerization]}
+- {name: Kubernetes, cat: devops, aliases: [kubernetes, k8s]}
+- {name: Terraform, cat: devops, aliases: [terraform, opentofu]}
+- {name: Ansible, cat: devops, aliases: [ansible]}
+- {name: Chef, cat: devops, cs: true, aliases: [Chef]}
+- {name: Puppet, cat: devops, cs: true, aliases: [Puppet]}
+- {name: Jenkins, cat: devops, aliases: [jenkins]}
+- {name: CI/CD, cat: devops, aliases: [ci/cd, cicd, "continuous integration", "continuous delivery", "continuous deployment"]}
+- {name: GitHub Actions, cat: devops, aliases: ["github actions", circleci, "gitlab ci", travis]}
+- {name: Git, cat: devops, aliases: [git]}   # not "github": every github.com link would count
+- {name: Linux, cat: devops, aliases: [linux, unix, ubuntu, debian]}
+- {name: Nginx, cat: devops, aliases: [nginx]}
+- {name: Prometheus, cat: devops, aliases: [prometheus, grafana]}
+- {name: Datadog, cat: devops, aliases: [datadog, "new relic", newrelic]}
+- {name: OpenTelemetry, cat: devops, aliases: [opentelemetry, otel]}
+- {name: Helm, cat: devops, cs: true, aliases: [Helm, ArgoCD, "Argo CD"]}
+- {name: Pulumi, cat: devops, aliases: [pulumi]}
+- {name: Istio, cat: devops, aliases: [istio, envoy]}
+- {name: Splunk, cat: devops, aliases: [splunk]}
+- {name: Sentry, cat: devops, cs: true, aliases: [Sentry]}
+- {name: Observability, cat: devops, aliases: [observability]}
+- {name: DevOps, cat: devops, aliases: [devops, "dev ops"]}
+
+# ---------------- other tech ----------------
+- {name: Blockchain, cat: other_tech, aliases: [blockchain, ethereum, "smart contracts", web3, crypto, cryptocurrency, bitcoin]}
+- {name: Embedded, cat: other_tech, aliases: [embedded, firmware, rtos]}
+- {name: FPGA, cat: other_tech, aliases: [fpga, fpgas]}
+- {name: Robotics, cat: other_tech, aliases: [robotics, ros2]}
+- {name: Unity, cat: other_tech, cs: true, aliases: [Unity, Unity3D]}
+- {name: Unreal, cat: other_tech, cs: true, aliases: ["Unreal Engine", Unreal, UE4, UE5]}
+- {name: Security, cat: other_tech, aliases: [infosec, cybersecurity, "application security", appsec, pentest, "penetration testing"]}
+- {name: Distributed Systems, cat: other_tech, aliases: ["distributed systems", "distributed system"]}
+- {name: API Design, cat: other_tech, aliases: ["api design", openapi, swagger]}
+- {name: TDD, cat: other_tech, cs: true, aliases: [TDD, "test-driven", "test driven"]}
+- {name: Selenium, cat: other_tech, aliases: [selenium, cypress, playwright]}
+
+# ---------------- product / business tools ----------------
+- {name: Figma, cat: tools, aliases: [figma]}
+- {name: Salesforce, cat: tools, aliases: [salesforce]}
+- {name: SAP, cat: tools, cs: true, aliases: [SAP]}
+- {name: Jira, cat: tools, aliases: [jira]}
+- {name: Agile, cat: tools, cs: true, aliases: [Agile, agile, Scrum, scrum, Kanban, kanban]}
+- {name: HubSpot, cat: tools, aliases: [hubspot]}
+- {name: Shopify, cat: tools, aliases: [shopify]}
+- {name: WordPress, cat: tools, aliases: [wordpress]}
+- {name: Stripe, cat: tools, cs: true, aliases: ["Stripe API", "Stripe integration"]}
+- {name: SEO, cat: tools, cs: true, aliases: [SEO]}
+- {name: Google Analytics, cat: tools, aliases: ["google analytics", ga4, mixpanel, amplitude]}

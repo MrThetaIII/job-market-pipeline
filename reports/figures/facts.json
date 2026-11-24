@@ -1,0 +1,313 @@
+{
+  "total_jobs": 92571,
+  "raw_mb": 273.3,
+  "requests": {
+    "hn": 101086,
+    "remoteok": 1,
+    "arbeitnow": 14,
+    "wwr": 1025
+  },
+  "hn_req_per_s": 63.0,
+  "job_skill_rows": 389492,
+  "hn_months": 184,
+  "rejects": 12277,
+  "rows_by_source": {
+    "arbeitnow": 3146,
+    "hn": 88324,
+    "remoteok": 100,
+    "wwr": 1001
+  },
+  "hn_years": [
+    2011,
+    2026
+  ],
+  "hn_cleaning": {
+    "Pipe header, fully parsed": 48333,
+    "Pipe header + role found by regex": 23329,
+    "Dash / bullet separators": 10303,
+    "Free text, regex only": 6359,
+    "Rejected: no company or role found": 5230,
+    "Deleted or flagged on HN": 7046,
+    "total_comments": 100600,
+    "kept_pct": 87.8
+  },
+  "volume": {
+    "peak_month": "2021-12",
+    "peak_12m_avg": 832,
+    "latest_month": "2026-11",
+    "latest_12m_avg": 278,
+    "drop_pct": 67
+  },
+  "remote": {
+    "2011": 12.7,
+    "2012": 13.9,
+    "2013": 14.4,
+    "2014": 16.6,
+    "2015": 16.7,
+    "2016": 18.9,
+    "2017": 19.7,
+    "2018": 22.9,
+    "2019": 29.4,
+    "2020": 58.9,
+    "2021": 79.4,
+    "2022": 82.8,
+    "2023": 69.3,
+    "2024": 60.8,
+    "2025": 56.2,
+    "2026": 54.5
+  },
+  "skill_trend": {
+    "Python": [
+      17.5,
+      26.7,
+      26.1
+    ],
+    "TypeScript": [
+      0.0,
+      24.1,
+      24.1
+    ],
+    "React": [
+      0.0,
+      32.2,
+      23.9
+    ],
+    "Rust": [
+      0.0,
+      9.0,
+      9.0
+    ],
+    "Go": [
+      0.2,
+      11.7,
+      7.1
+    ],
+    "JavaScript": [
+      18.4,
+      27.5,
+      3.4
+    ],
+    "Java": [
+      12.6,
+      14.7,
+      3.6
+    ],
+    "Rails": [
+      16.7,
+      17.2,
+      3.4
+    ]
+  },
+  "ai": {
+    "2011": [
+      4.6,
+      0.0
+    ],
+    "2012": [
+      8.5,
+      0.0
+    ],
+    "2013": [
+      9.1,
+      0.0
+    ],
+    "2014": [
+      10.9,
+      0.0
+    ],
+    "2015": [
+      10.7,
+      0.0
+    ],
+    "2016": [
+      13.2,
+      0.0
+    ],
+    "2017": [
+      16.6,
+      0.0
+    ],
+    "2018": [
+      18.9,
+      0.0
+    ],
+    "2019": [
+      18.5,
+      0.0
+    ],
+    "2020": [
+      18.6,
+      0.0
+    ],
+    "2021": [
+      16.5,
+      0.0
+    ],
+    "2022": [
+      19.0,
+      0.3
+    ],
+    "2023": [
+      26.5,
+      5.6
+    ],
+    "2024": [
+      36.0,
+      12.1
+    ],
+    "2025": [
+      50.2,
+      20.3
+    ],
+    "2026": [
+      60.1,
+      25.5
+    ]
+  },
+  "salary_disclosed": {
+    "2011": 0.3,
+    "2012": 0.4,
+    "2013": 1.4,
+    "2014": 0.8,
+    "2015": 1.8,
+    "2016": 5.0,
+    "2017": 7.2,
+    "2018": 9.5,
+    "2019": 6.2,
+    "2020": 3.6,
+    "2021": 4.4,
+    "2022": 6.6,
+    "2023": 12.1,
+    "2024": 16.8,
+    "2025": 21.9,
+    "2026": 28.8
+  },
+  "median_salary": {
+    "2011": 90000.0,
+    "2012": 85000.0,
+    "2013": 77500.0,
+    "2014": 95000.0,
+    "2015": 115000.0,
+    "2016": 110000.0,
+    "2017": 108475.0,
+    "2018": 110000.0,
+    "2019": 120000.0,
+    "2020": 124300.0,
+    "2021": 130000.0,
+    "2022": 137500.0,
+    "2023": 155000.0,
+    "2024": 158000.0,
+    "2025": 170000.0,
+    "2026": 175000.0
+  },
+  "salary_premium": {
+    "Excel": [
+      95400,
+      155000,
+      50
+    ],
+    "HTML": [
+      100000,
+      155000,
+      62
+    ],
+    "CSS": [
+      102300,
+      155000,
+      53
+    ],
+    "PHP": [
+      110028,
+      155000,
+      46
+    ],
+    ".NET": [
+      130000,
+      155000,
+      51
+    ],
+    "MLOps": [
+      175000,
+      152500,
+      43
+    ],
+    "Snowflake": [
+      176400,
+      152858,
+      44
+    ],
+    "AI Agents": [
+      175000,
+      150000,
+      301
+    ],
+    "Kafka": [
+      178500,
+      152500,
+      59
+    ],
+    "Rust": [
+      179250,
+      152000,
+      156
+    ],
+    "Machine Learning": [
+      178662,
+      150000,
+      152
+    ],
+    "PyTorch": [
+      185000,
+      152500,
+      53
+    ],
+    "Distributed Systems": [
+      190000,
+      150927,
+      99
+    ],
+    "Spark": [
+      192500,
+      152500,
+      40
+    ]
+  },
+  "role_mix": {
+    "arbeitnow": {
+      "Software engineering": 15.2,
+      "Data, ML & AI": 12.2,
+      "DevOps & infrastructure": 2.5,
+      "Engineering management": 1.5,
+      "Product & design": 4.2,
+      "Sales, marketing & support": 20.7,
+      "Other / non-tech": 43.7
+    },
+    "wwr": {
+      "Software engineering": 17.2,
+      "Data, ML & AI": 11.7,
+      "DevOps & infrastructure": 2.9,
+      "Engineering management": 1.5,
+      "Product & design": 4.4,
+      "Sales, marketing & support": 28.7,
+      "Other / non-tech": 33.5
+    },
+    "remoteok": {
+      "Software engineering": 19.0,
+      "Data, ML & AI": 17.0,
+      "DevOps & infrastructure": 4.0,
+      "Engineering management": 2.0,
+      "Product & design": 6.0,
+      "Sales, marketing & support": 15.0,
+      "Other / non-tech": 37.0
+    },
+    "hn": {
+      "Software engineering": 60.6,
+      "Data, ML & AI": 16.6,
+      "DevOps & infrastructure": 6.8,
+      "Engineering management": 2.9,
+      "Product & design": 1.7,
+      "Sales, marketing & support": 1.6,
+      "Other / non-tech": 9.8
+    }
+  }
+}
