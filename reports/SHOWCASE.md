@@ -178,6 +178,10 @@ The ten figures answer the questions I chose. The dashboard lets a reader ask th
 It is a single Streamlit page over the same Parquet tables, and every panel recalculates
 when a filter changes.
 
+**Live: <https://tech-hiring-2011-2026.streamlit.app>** (hosted on Streamlit Community
+Cloud; it can take a few seconds to wake if nobody has visited recently). To run it
+locally instead:
+
 ```powershell
 streamlit run dashboard/app.py
 ```
@@ -229,7 +233,7 @@ This view is also a link. Filters are read from the address, so any view can be
 bookmarked or shared:
 
 ```
-http://localhost:8501/?skill=Rust&remote=1&from=2018
+https://tech-hiring-2011-2026.streamlit.app/?skill=Rust&remote=1&from=2018
 ```
 
 Accepted parameters: `from`, `to` (years), `source` (`hn`, `wwr`, `arbeitnow`,

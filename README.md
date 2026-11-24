@@ -2,7 +2,11 @@
 
 Fifteen years of tech hiring, collected from four job boards, cleaned into one table and
 turned into findings. **Start with the showcase: [reports/SHOWCASE.md](reports/SHOWCASE.md)**
-(introduction + 10 figures).
+(introduction, 10 figures and a dashboard tour).
+
+**Live dashboard: <https://tech-hiring-2011-2026.streamlit.app>** — filter by source,
+role, skill and year. (Hosted on Streamlit Community Cloud; it may take a few seconds to
+wake up if nobody has visited recently.)
 
 ## Findings in brief
 
